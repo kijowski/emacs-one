@@ -1,13 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> AdonisJS - A fully featured web framework for Node.js </title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AdonisJS - A fully featured web framework for Node.js</title>
 
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body>
-  <h1> It Works! </h1>
-</body>
+    @vite(['resources/css/app.css', 'resources/css/prism-theme.css', 'resources/js/app.ts', 'resources/js/my-code-input.ts'])
+  </head>
+  <body>
+    <div class="relative w-10/12 h-96 mx-auto">
+      <textarea
+        class="w-full h-full !m-5 !p-5 shadow-blocky leading-3 font-mono absolute top-0 left-0 overflow-auto whitespace-nowrap resize-none flex z-10 peer min-h-[80px] px-3 py-2 !text-lg bg-transparent text-transparent caret-black border-2 border-neutral-900 placeholder:text-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 focus:shadow-none duration-500 shadow-blocky"
+        placeholder="Enter emacs snippet"
+        id="editing"
+        spellcheck="false"
+      ></textarea>
+      <pre
+        id="highlighting"
+        class="border-2 w-full h-full !m-5 !p-5 text-lg leading-3 z-0 font-mono absolute top-0 overflow-auto !whitespace-nowrap left-0 bg-slate-100 text-black"
+        aria-hidden="true"
+      >
+        <code class="language-lisp !text-lg leading-3 !font-mono m-0 whitespace-pre" id="highlighting-content"></code>
+      </pre>
+    </div>
+
+    <div class="relative w-2/3 h-96 mx-auto my-10">
+      <pre
+        class="border-2 w-full h-full !m-5 !p-5 text-lg leading-3 z-0 font-mono absolute top-0 overflow-auto !whitespace-nowrap left-0 bg-slate-100 text-black shadow-blocky border-neutral-900 hover:shadow-none"
+        aria-hidden="true"
+      >
+        <code class="language-lisp !text-lg leading-3 !font-mono m-0 whitespace-pre" id="highlighting-content">(defun secondOne ()
+  (interactive)
+    (message "Hey"))
+        </code>
+      </pre>
+    </div>
+
+  </body>
 </html>
