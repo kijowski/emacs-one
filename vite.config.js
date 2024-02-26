@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import adonisjs from '@adonisjs/vite/client'
+import autoprefixer from 'autoprefixer'
+import tailwindcss from 'tailwindcss'
 
 export default defineConfig({
   plugins: [
@@ -8,7 +10,7 @@ export default defineConfig({
        * Entrypoints of your application. Each entrypoint will
        * result in a separate bundle.
        */
-      entrypoints: ['resources/css/app.css', 'resources/js/app.js'],
+      entrypoints: ['resources/css/app.css', 'resources/js/app.ts'],
 
       /**
        * Paths to watch and reload the browser on file change
@@ -16,4 +18,9 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
   ],
+  css: {
+    postcss: {
+      plugins: [tailwindcss, autoprefixer],
+    },
+  },
 })
