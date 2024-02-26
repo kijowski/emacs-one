@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs'
 // import Prism from 'prismjs'
-import './prism.js'
+import './vendor/prism.js'
 Alpine.start()
 
 export function test() {
