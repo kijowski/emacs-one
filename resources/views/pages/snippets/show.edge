@@ -1,0 +1,33 @@
+@shell({ title: 'Snippets' })
+@slot('meta')
+<meta name="description" content="Our cool page" />
+@vite(['resources/css/prism-theme.css', 'resources/js/base.ts'])
+
+@endslot
+
+
+<div class="py-10 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <!-- Page Heading -->
+  <header class="max-w-3xl">
+    <p class="mb-2 text-sm font-semibold text-blue-600">{{ snippet.user.username }}</p>
+    <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">{{ snippet.name }}</h1>
+    <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">{{ snippet.description }}</p>
+    <div class="flex flex-col gap-2 items-center mt-5 sm:flex-row sm:gap-3">
+    </div>
+  </header>
+  <!-- End Page Heading -->
+
+  <pre class="overflow-auto z-10 p-3 whitespace-nowrap border-0 text-md size-full
+[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 dark:bg-slate-900
+              ">
+        <code class="language-lisp match-braces leading-3 !font-mono m-0 whitespace-pre disabled:cursor-not-allowed disabled:opacity-50 focus:shadow-none">{{{ snippet.tokenized }}}</code>
+      </pre>
+
+    <div class="py-3 px-4 bg-gray-100 rounded-b-xl md:py-4 md:px-5 dark:border-gray-700 dark:bg-slate-900">
+      @each(tag in snippet.tags)
+      <span class="inline-flex gap-x-1.5 items-center py-1.5 px-3 text-xs font-medium text-gray-800 bg-white rounded-md border border-gray-200 shadow-sm dark:text-white dark:border-gray-700 dark:bg-slate-900">{{tag.name}}</span>
+      @end
+    </div>
+</div>
+
+@end

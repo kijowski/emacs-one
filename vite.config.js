@@ -4,13 +4,18 @@ import autoprefixer from 'autoprefixer'
 import tailwindcss from 'tailwindcss'
 
 export default defineConfig({
+  host: '0.0.0.0',
   plugins: [
     adonisjs({
       /**
        * Entrypoints of your application. Each entrypoint will
        * result in a separate bundle.
        */
-      entrypoints: ['resources/css/app.css', 'resources/js/app.ts'],
+      entrypoints: [
+        'resources/js/base.ts',
+        'resources/js/my_code_input.ts',
+        'resources/js/components/**/*.{ts,tsx,js,jsx}',
+      ],
 
       /**
        * Paths to watch and reload the browser on file change

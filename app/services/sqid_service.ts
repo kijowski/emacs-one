@@ -6,11 +6,11 @@ const sqids = new Sqids({
   minLength: 4,
 })
 
-export function encodeId(id: number) {
+export function encodeSqid(id: number) {
   return sqids.encode([id])
 }
 
-export function decodeSid(sid: string) {
+export function decodeSqid(sid: string) {
   const numbers = sqids.decode(sid) // [1, 2, 3]
   if (numbers.length !== 1) {
     throw new Error('Invalid sid')

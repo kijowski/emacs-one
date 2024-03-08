@@ -6,15 +6,17 @@ https://prismjs.com/download.html#themes=prism-funky&languages=markup */
  * @author Lea Verou
  */
 
+/* @import "prismjs/themes/prism-dark.css" */
+
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: #aaa;
+	color: hsl(30, 20%, 50%);
 }
 
 .token.punctuation {
-	color: #999;
+	opacity: .7;
 }
 
 .token.namespace {
@@ -27,35 +29,36 @@ https://prismjs.com/download.html#themes=prism-funky&languages=markup */
 .token.number,
 .token.constant,
 .token.symbol {
-	color: #0cf;
+	color: hsl(350, 40%, 70%);
 }
 
 .token.selector,
 .token.attr-name,
 .token.string,
 .token.char,
-.token.builtin {
-	color: yellow;
+.token.builtin,
+.token.inserted {
+	color: hsl(75, 70%, 60%);
 }
 
 .token.operator,
 .token.entity,
 .token.url,
 .language-css .token.string,
-.token.variable,
-.token.inserted {
-	color: yellowgreen;
+.style .token.string,
+.token.variable {
+	color: hsl(40, 90%, 60%);
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
-	color: deeppink;
+	color: hsl(350, 40%, 70%);
 }
 
 .token.regex,
 .token.important {
-	color: orange;
+	color: #e90;
 }
 
 .token.important,
@@ -74,17 +77,3 @@ https://prismjs.com/download.html#themes=prism-funky&languages=markup */
 	color: red;
 }
 
-/* Plugin styles: Diff Highlight */
-pre.diff-highlight.diff-highlight > code .token.deleted:not(.prefix),
-pre > code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
-	background-color: rgba(255, 0, 0, .3);
-	display: inline;
-}
-
-pre.diff-highlight.diff-highlight > code .token.inserted:not(.prefix),
-pre > code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
-	background-color: rgba(0, 255, 128, .3);
-	display: inline;
-}
-
-/* End of prism.js syntax highlighting*/
