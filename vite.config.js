@@ -14,7 +14,7 @@ export default defineConfig({
       entrypoints: [
         'resources/js/base.ts',
         'resources/js/my_code_input.ts',
-        'resources/js/components/**/*.{ts,tsx,js,jsx}',
+        'resources/js/code_preview.ts',
       ],
 
       /**

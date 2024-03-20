@@ -1,5 +1,10 @@
+// import './vendor/prism.js'
 import * as Prism from 'prismjs'
 import 'prismjs/components/prism-lisp.js'
+// import loadLanguages from 'prismjs/components/index.js'
+
+// window.x = loadLanguages
+// loadLanguages('lisp')
 
 function update(text: string) {
   let resultElement = document.querySelector('#highlighting-content')!
@@ -13,14 +18,6 @@ function update(text: string) {
     .replace(new RegExp('<', 'g'), '&lt;') /* Global RegExp */
   // Syntax Highlight
   Prism.highlightElement(resultElement)
-}
-
-function syncScroll(element: HTMLElement) {
-  /* Scroll result to scroll coords of event - sync with textarea */
-  let resultElement = document.querySelector('#highlighting')!
-  // Get and set x and y
-  resultElement.scrollTop = element.scrollTop
-  resultElement.scrollLeft = element.scrollLeft
 }
 
 function check_tab(element: HTMLTextAreaElement, event: KeyboardEvent) {
@@ -39,23 +36,18 @@ function check_tab(element: HTMLTextAreaElement, event: KeyboardEvent) {
   }
 }
 
-const editor = document.getElementById('editing')! as HTMLTextAreaElement
-
-editor.onscroll = function () {
-  syncScroll(this as HTMLTextAreaElement)
-}
+const editor = document.getElementById('code')! as HTMLTextAreaElement
 
 editor.oninput = function () {
   update((this as HTMLTextAreaElement).value)
-  syncScroll(this as HTMLTextAreaElement)
 }
 editor.onkeydown = function (event) {
   check_tab(this as HTMLTextAreaElement, event)
 }
 
-const initialValue = `(defun test-functionisio ()
-  (interactive)
-    (message "Hey there"))`
+// const initialValue = `(defun test-functionisio ()
+//   (interactive)
+//     (message "Hey there"))`
 
-editor.value = initialValue
-update(initialValue)
+// editor.value = initialValue
+update(editor.value)

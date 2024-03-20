@@ -1,33 +1,64 @@
-@shell({ title: 'Snippets' })
-@slot('meta')
-<meta name="description" content="Our cool page" />
-@vite(['resources/css/prism-theme.css', 'resources/js/base.ts'])
+@shell({ title: 'emacs.one - ' + snippet.name })
 
-@endslot
+@header({title: snippet.name})
+<li><a href="{{route('home')}}">Home</a></li>
+<li><a href="{{route('snippets.index')}}">Snippets</a></li>
+<li>{{snippet.name}}</li>
+@end
+<div class="flex justify-between">
+  <a class="mb-2 text-sm font-semibold link link-hover"
+    href="{{route('users.show', {id: encodeURI(snippet.user.name)})}}">by: {{snippet.user.name }}</a>
 
+  @if(auth.user)
+  <div class="ml-4 dropdown dropdown-end">
+    <div tabindex="0" role="button" class="btn btn-sm btn-accent">Actions</div>
+    <ul tabindex="0" class="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow bg-base-300 rounded-box w-52">
+      <!-- <li><button id="copy">Copy code</button></li> -->
+      <!-- <li>
+              <button hx-post="{{route('snippets.favorite', {id: snippet.sqid})}}" hx-vals='{"_csrf": "{{csrfToken}}"}'>
+                @if(snippet.isFavorite)
+                Remove from favorites
+                @else
+                Add to favorites
+                @end
+              </button>
+            </li> -->
+      <li><a href="{{route('snippets.create', {}, {qs: {base:snippet.sqid}})}}">Remix</a></li>
 
-<div class="py-10 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-  <!-- Page Heading -->
-  <header class="max-w-3xl">
-    <p class="mb-2 text-sm font-semibold text-blue-600">{{ snippet.user.username }}</p>
-    <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">{{ snippet.name }}</h1>
-    <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">{{ snippet.description }}</p>
-    <div class="flex flex-col gap-2 items-center mt-5 sm:flex-row sm:gap-3">
-    </div>
-  </header>
-  <!-- End Page Heading -->
-
-  <pre class="overflow-auto z-10 p-3 whitespace-nowrap border-0 text-md size-full
-[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 dark:bg-slate-900
-              ">
-        <code class="language-lisp match-braces leading-3 !font-mono m-0 whitespace-pre disabled:cursor-not-allowed disabled:opacity-50 focus:shadow-none">{{{ snippet.tokenized }}}</code>
-      </pre>
-
-    <div class="py-3 px-4 bg-gray-100 rounded-b-xl md:py-4 md:px-5 dark:border-gray-700 dark:bg-slate-900">
-      @each(tag in snippet.tags)
-      <span class="inline-flex gap-x-1.5 items-center py-1.5 px-3 text-xs font-medium text-gray-800 bg-white rounded-md border border-gray-200 shadow-sm dark:text-white dark:border-gray-700 dark:bg-slate-900">{{tag.name}}</span>
+      @if(snippet.user.sqid === auth.user?.sqid)
+      <li><a href="{{route('snippets.edit', {id: snippet.sqid})}}">Edit</a></li>
+      <li><button onclick="my_modal_1.showModal()" class="text-error">Delete</button></li>
       @end
-    </div>
+    </ul>
+  </div>
+  @end
 </div>
+<div class="pt-2 flex justify-start gap-2">
+  @each(tag in snippet.tags)
+  <a href="{{route('tags.show', {id: encodeURI(tag.name)})}}" class="btn btn-neutral btn-outline btn-xs">{{ tag.name
+    }}</a>
+  @end
+  <dialog id="my_modal_1" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Delete snippet?</h3>
+      <div class="modal-action">
+        <form method="post" action="{{route('snippets.delete', {id:snippet.sqid}, {qs: {_method: 'DELETE'}})}}">
+          {{ csrfField() }}
+          <button type="submit" class="btn btn-error">Delete</button>
+        </form>
+        <form method="dialog">
+          <button class="btn">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+</div>
+<p class="my-4 text-lg text-gray-800 dark:text-gray-400 whitespace-pre-line">{{ snippet.description }}</p>
+<pre
+  class="overflow-auto z-10 p-3 whitespace-nowrap border-0 text-md size-full
+[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 dark:bg-base-200">
+        <code class="language-lisp match-braces leading-3 !font-mono m-0 whitespace-pre disabled:cursor-not-allowed disabled:opacity-50 focus:shadow-none">{{{ snippet.tokenized }}}</code>
+</pre>
+
 
 @end

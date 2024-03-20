@@ -1,0 +1,14 @@
+@shell({ title: 'emacs.one - tag: ' + tag.name })
+
+@header({title: 'tag: ' + tag.name})
+<li><a href="{{route('home')}}">Home</a></li>
+<li><a href="{{route('tags.index')}}">Tags</a></li>
+<li>{{tag.name}}</li>
+@end
+<div class="grid sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-2">
+  @each(snippet in tag.snippets)
+  @!snippetCard({snippet})
+  @end
+</div>
+
+@end

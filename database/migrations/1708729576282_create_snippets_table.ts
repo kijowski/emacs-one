@@ -10,7 +10,7 @@ export default class extends BaseSchema {
 
       table.string('name', 100).notNullable()
       table.text('description')
-      table.text('content')
+      table.text('code')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

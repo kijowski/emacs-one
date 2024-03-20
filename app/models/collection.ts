@@ -5,7 +5,7 @@ import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Snippet from './snippet.js'
 import Tag from './tag.js'
 
-export default class SnippetList extends BaseModel {
+export default class Collection extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 

@@ -3,11 +3,16 @@ import { BaseModel, belongsTo, column, computed, manyToMany } from '@adonisjs/lu
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Tag from './tag.js'
-import SnippetList from './snippet_list.js'
+import Collection from './collection.js'
 import { tokenize } from '#services/highlight_service'
-import { encodeSqid } from '#services/sqid_service'
+import { IdEntity, encodeSqid } from '#services/sqid_service'
 
 export default class Snippet extends BaseModel {
+  serializeExtras() {
+    return {
+      isFavorite: this.$extras.is_favorite,
+    }
+  }
   @column({ isPrimary: true })
   declare id: number
 
@@ -18,7 +23,7 @@ export default class Snippet extends BaseModel {
   declare description: string
 
   @column()
-  declare content: string
+  declare code: string
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
@@ -26,8 +31,11 @@ export default class Snippet extends BaseModel {
   @column()
   declare userId: number
 
-  @manyToMany(() => SnippetList)
-  declare lists: ManyToMany<typeof SnippetList>
+  @manyToMany(() => Collection)
+  declare collections: ManyToMany<typeof Collection>
+
+  @manyToMany(() => User, { pivotTable: 'user_favorites' })
+  declare favoritedBy: ManyToMany<typeof User>
 
   @manyToMany(() => Tag)
   declare tags: ManyToMany<typeof Tag>
@@ -40,12 +48,17 @@ export default class Snippet extends BaseModel {
 
   @computed()
   get tokenized() {
-    return tokenize(this.content)
+    return tokenize(this.code)
   }
 
   @computed()
   get sqid() {
-    return encodeSqid(this.id)
+    return encodeSqid(this.id, IdEntity.Snippet)
+  }
+
+  @computed()
+  get excerpt() {
+    return tokenize(this.code.split('\n').splice(0, 10).join('\n').trim())
   }
 
   // @computed()

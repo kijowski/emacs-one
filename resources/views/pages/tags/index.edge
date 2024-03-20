@@ -1,0 +1,23 @@
+@shell({ title: 'emacs.one - Tags' })
+
+@header({title: 'All tags'})
+<li><a href="{{route('home')}}">Home</a></li>
+<li><a href="{{route('tags.index')}}">Tags</a></li>
+@end
+
+<div class="grid sm:grid-cols-2 xl:grid-cols-6 md:grid-cols-4 gap-2">
+  @each(tag in tags)
+  <a class="hover:text-primary" href="{{route('tags.show', {id: encodeURI(tag.name)})}}">
+    <div class="card card-compact bg-base-200 shadow-blocky group hover:shadow-none duration-200">
+      <div class="card-body">
+        <h2 class="card-title">{{tag.name}}</h2>
+        <p>{{ tag.counts.snippets }} snippets</p>
+      </div>
+    </div>
+  </a>
+  @end
+</div>
+
+@!pagination({routeBase: route('tags.index'), pagination})
+
+@end

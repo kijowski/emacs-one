@@ -1,0 +1,31 @@
+<div class="card card-compact bg-base-200 shadow-blocky group hover:shadow-none duration-200">
+  <figure>
+    <div class="w-full relative pt-32 overflow-hidden">
+      <a class="link link-hover" href="{{route('snippets.show', {id: snippet.sqid})}}">
+      <pre
+        class="object-cover absolute overflow-hidden top-0 z-0 p-4 text-sm whitespace-pre transition-transform duration-200 group-hover:scale-105 size-full dark:bg-base-300"
+        aria-hidden="true"><code class="language-lisp whitespace-pre">{{{truncate(snippet.excerpt, 5500)}}}</code>
+    </pre>
+      </a>
+    </div>
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title">
+      <a class="link link-hover" href="{{route('snippets.show', {id: snippet.sqid})}}">
+        {{snippet.name}}
+      </a>
+    </h2>
+    <a class="text-xs link link-hover font-semibold" href="{{route('users.show', {id: encodeURI(snippet.user.name)})}}">
+      {{snippet.user.name}}
+    </a>
+    <p class="whitespace-pre-line">{{ truncate(snippet.description, 500) }}</p>
+
+    <div class="card-actions justify-end">
+      @each(tag in snippet.tags)
+      <a href="{{route('tags.show', {id: encodeURI(tag.name)})}}"
+        class="btn btn-neutral btn-outline btn-xs">{{tag.name}}</a>
+      @end
+    </div>
+
+  </div>
+</div>

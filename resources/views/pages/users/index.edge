@@ -1,0 +1,23 @@
+@shell({ title: 'emacs.one - Users' })
+
+@header({title: 'All users'})
+<li><a href="{{route('home')}}">Home</a></li>
+<li><a href="{{route('users.index')}}">Users</a></li>
+@end
+
+<div class="grid sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-2">
+  @each(user in users)
+  <a class="hover:text-primary" href="{{route('users.show', {id: encodeURI(user.name)})}}">
+    <div class="card card-compact bg-base-200 shadow-blocky group hover:shadow-none duration-200">
+      <div class="card-body">
+        <h2 class="card-title">{{user.name}}</h2>
+        <p>{{ user.counts.snippets }} snippets</p>
+      </div>
+    </div>
+  </a>
+  @end
+</div>
+
+@!pagination({routeBase: route('users.index'), pagination})
+
+@end

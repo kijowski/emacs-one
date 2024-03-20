@@ -1,27 +1,21 @@
-@shell({ title: 'emacs.one - Add new snippet' })
+@shell({ title: 'emacs.one - Edit ' + snippet.name })
 @slot('meta')
 @vite(['resources/js/code_preview.ts'])
 @endslot
-@header({title: 'Add new snippet'})
+
+@header({title: 'Edit'})
 <li><a href="{{route('home')}}">Home</a></li>
 <li><a href="{{route('snippets.index')}}">Snippets</a></li>
-<li>Add new snippet</li>
+<li><a href="{{route('snippets.show', {id: snippet.sqid})}}"> {{snippet.name}}</a></li>
 @end
 
-@if(!auth.user)
-<div role="alert" class="alert alert-error">
-  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-  <span>You need to be logged in to add new snippets</span>
-</div>
-@end
-
-<form class="w-full" action="{{route('snippets.store')}}" method="post">
+<form class="w-full" action="{{route('snippets.update', {id: snippet.sqid})}}" method="post">
   {{ csrfField() }}
   <label class="form-control">
     <div class="label">
       <span class="label-text">What is the name of this snippet?</span>
     </div>
-    <input type="text" id="name" name="name" value="{{old('name')|| (base.name && base.name + ' - remix')|| ''}}" placeholder="Name goes here"
+    <input type="text" id="name" name="name" value="{{old('name')|| snippet.name || ''}}" placeholder="Name goes here"
       class="w-full input input-bordered" />
     @inputError('name')
     @each(message in $messages)
@@ -36,15 +30,15 @@
       <span class="label-text">What does it do?</span>
     </div>
     <textarea id="description" name="description"
-      placeholder="Description goes here" class="textarea w-full textarea-bordered min-h-32">{{old('description') || base.description || ''}}</textarea>
+      placeholder="Description goes here" class="textarea w-full min-h-32 textarea-bordered">{{old('description') || snippet.description || ''}}</textarea>
   </label>
 
   <label class="form-control">
     <div class="label">
       <span class="label-text">Tags separated by commas</span>
     </div>
-    <input type="text" id="tags" name="tags" value="{{old('tags') || base.tags?.map(tag=>tag.name) || ''}}" placeholder="one, two, three"
-      class="w-full input input-bordered" />
+    <input type="text" id="tags" name="tags" value="{{old('tags') || snippet.tags.map(x=>x.name) || ''}}"
+      placeholder="one, two, three" class="w-full input input-bordered" />
   </label>
   <label class="form-control">
     <div class="label">
@@ -52,9 +46,10 @@
     </div>
     <textarea
       class="textarea resize-y textarea-bordered w-full min-h-96 font-mono [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-resizer]:hidden  [&::-webkit-scrollbar-corner]:hidden"
-      id="code" name="code" spellcheck="false" placeholder="Snippet">{{old('code') || base.code || ''}}</textarea>
+      id="code" name="code" value="{{old('code') || snippet.code || ''}}" spellcheck="false"
+      placeholder="Snippet">{{old('code') || snippet.code || ''}}</textarea>
   </label>
-  <button type="submit" class="my-4 btn btn-block btn-accent" {{html.attrs({disabled: !auth.user})}}>Add new snippet</button>
+  <button type="submit" class="my-4 btn btn-block btn-accent">Update snippet</button>
 </form>
 <div class="collapse collapse-arrow bg-base-200">
   <input type="checkbox" checked />

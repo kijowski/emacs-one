@@ -1,42 +1,16 @@
-@shell({ title: 'Snippets' })
-@slot('meta')
-<meta name="description" content="Our cool page" />
-@vite(['resources/css/prism-theme.css', 'resources/js/base.ts'])
-@endslot
+@shell({ title: 'emacs.one - Snippets' })
 
-<div class="py-10 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-  <div class="grid grid-cols-4 gap-4">
+@header({title})
+<li><a href="{{route('home')}}">Home</a></li>
+<li><a href="{{route('snippets.index')}}">Snippets</a></li>
+@end
 
-    @each(snippet in snippets)
-
-    <a class="flex overflow-hidden flex-col bg-white border transition dark:border-gray-700 hover:shadow-none group duration-500 shadow-blocky dark:bg-slate-900 dark:shadow-slate-700/[.7]"
-       href="{{route('snippets.show', {id: snippet.sqid})}}">
-      <div class="relative pt-[50%] sm:pt-[60%] lg:pt-[80%] overflow-hidden">
-        <pre
-          class="object-cover overflow-hidden absolute top-0 z-0 p-2 text-xs whitespace-pre
-                 transition-transform duration-500 ease-in-out group-hover:scale-105 size-full"
-          aria-hidden="true"
-          <code class="language-lisp whitespace-pre">{{{ truncate(snippet.tokenized, 1500)}}}</code>
-        </pre>
-      </div>
-
-      <div class="p-4 md:p-5">
-        <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-          {{ snippet.name }}
-        </h3>
-        <p class="mt-1 text-gray-500 dark:text-gray-400">
-          {{ snippet.description }}
-        </p>
-      </div>
-      <div class="py-3 px-4 bg-gray-100 rounded-b-xl border-t md:py-4 md:px-5 dark:border-gray-700 dark:bg-slate-900">
-        @each(tag in snippet.tags)
-        <span class="inline-flex gap-x-1.5 items-center py-1.5 px-3 text-xs font-medium text-gray-800 bg-white rounded-md border border-gray-200 shadow-sm dark:text-white dark:border-gray-700 dark:bg-slate-900">{{tag.name}}</span>
-        @end
-      </div>
-    </a>
-
-    @end
-  </div>
+<div class="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+  @each(snippet in snippets)
+  @!snippetCard({snippet})
+  @end
 </div>
+
+@!pagination({routeBase: route('snippets.index'), pagination})
 
 @end

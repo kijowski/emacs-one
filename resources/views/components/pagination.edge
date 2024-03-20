@@ -1,0 +1,15 @@
+@if(pagination.lastPage > 1)
+<div class="join grid grid-cols-2 pt-5">
+  @if(pagination.currentPage === pagination.firstPage)
+  <button class="join-item btn" disabled>Previous</button>
+  @else
+  <a class="join-item btn" href="{{routeBase + (pagination.previousPageUrl ?? pagination.firstPageUrl)}}">Previous</a>
+  @end
+
+  @if(pagination.currentPage === pagination.lastPage)
+  <button class="join-item btn" disabled>Next</button>
+  @else
+  <a class="join-item btn" href="{{routeBase + (pagination.nextPageUrl ?? pagination.lastPageUrl)}}">Next</a>
+  @end
+</div>
+@end

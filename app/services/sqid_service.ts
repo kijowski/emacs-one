@@ -6,14 +6,23 @@ const sqids = new Sqids({
   minLength: 4,
 })
 
-export function encodeSqid(id: number) {
-  return sqids.encode([id])
+export const IdEntity = {
+  User: 0,
+  Snippet: 1,
+  Tag: 2,
+  Collection: 3,
+} as const
+
+type Entity = (typeof IdEntity)[keyof typeof IdEntity]
+
+export function encodeSqid(id: number, kind: Entity) {
+  return sqids.encode([kind, id])
 }
 
 export function decodeSqid(sid: string) {
   const numbers = sqids.decode(sid) // [1, 2, 3]
-  if (numbers.length !== 1) {
+  if (numbers.length !== 2) {
     throw new Error('Invalid sid')
   }
-  return numbers[0]
+  return numbers[1]
 }

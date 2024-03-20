@@ -1,0 +1,57 @@
+@shell({title: 'emacs.one - {{titleCase(action)}}'})
+
+<header class="flex flex-col items-center gap-2">
+  <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white text-center">{{titleCase(action)}}
+  </h1>
+  <a href="{{route(action==='login' ?'register':'login')}}" class="link link-primary">{{action==='login' ? 'Don\'t have an account?' : 'Already registered?'}}</a>
+</header>
+<form class="w-full mx-auto" method="post">
+  {{ csrfField() }}
+  @if(referer)
+  <input type="hidden" name="forward" value="{{referer}}"/>
+  @end
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Username</span>
+    </div>
+    <input type="text" id="name" name="name" value="{{old('name')|| ''}}" placeholder="Your username"
+      class="input input-bordered w-full" />
+    @inputError('name')
+    @each(message in $messages)
+    <p>{{ message }}</p>
+    @end
+    @end
+  </label>
+  @if(action === 'register')
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Email</span>
+      <span class="label-text text-xs">Optional</span>
+    </div>
+    <input type="email" id="email" name="email" value="{{old('email')|| ''}}" placeholder="Your email"
+      class="input input-bordered w-full" />
+    @inputError('email')
+    @each(message in $messages)
+    <p>{{ message }}</p>
+    @end
+    @end
+  </label>
+  @end
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Password</span>
+    </div>
+    <input type="password" id="password" name="password" value="{{old('password')|| ''}}" placeholder="Your password"
+      class="input input-bordered w-full" />
+    @inputError('password')
+    @each(message in $messages)
+    <p>{{ message }}</p>
+    @end
+    @end
+  </label>
+
+  <button type="submit" class="btn btn-block btn-accent my-4">{{titleCase(action)}}</button>
+  </ul>
+</form>
+@end

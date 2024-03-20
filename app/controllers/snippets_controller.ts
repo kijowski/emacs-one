@@ -1,9 +1,8 @@
-import Snippet from '#models/snippet'
+import { editOrDeleteSnippet } from '#abilities/main'
 import SnippetService from '#services/snippet_service'
+import { createSnippetValidator } from '#validators/snippet'
 import { inject } from '@adonisjs/core'
-import { Exception } from '@adonisjs/core/exceptions'
 import { type HttpContext } from '@adonisjs/core/http'
-import { parse, formatAsHtml } from 'docco-next'
 
 @inject()
 export default class SnippetsController {
@@ -13,46 +12,78 @@ export default class SnippetsController {
     const { page } = request.qs()
     const pageNo = Number.parseInt(page ?? '1')
     const paginator = await this.snippetsService.getAllSnippets(pageNo)
-    // const paginator = await Snippet.query().preload('tags').preload('user').paginate(pageNo)
-    // const parsed = paginator.serialize().data
     const snippets = paginator.data
+    const pagination = paginator.meta
 
-    return view.render('pages/snippets/index', { snippets })
+    return view.render('pages/snippets/index', { snippets, pagination, title: 'All snippets' })
+  }
+
+  async favorites({ request, view }: HttpContext) {
+    const { page } = request.qs()
+    const pageNo = Number.parseInt(page ?? '1')
+    const paginator = await this.snippetsService.getFavoritesSnippets(pageNo)
+    const snippets = paginator.data
+    const pagination = paginator.meta
+    return view.render('pages/snippets/index', { snippets, pagination, title: 'Favorites' })
   }
 
   async show({ params, view }: HttpContext) {
     const snippetSqid = params.id
 
     const snippet = await this.snippetsService.getSnippet(snippetSqid)
-    // const snippet = await Snippet.find(snippetId)
-    // if (snippet == null) {
-    //   throw new Exception(`Could not find a snippet with id ${snippetId}`)
-    // }
-    // await snippet.load('tags')
-    // await snippet.load('user')
-    // const payload = snippet.serialize()
 
-    return view.render('pages/snippets/show', { snippet })
+    return view.render('pages/snippets/show', { snippet: snippet.serialize() })
   }
 
-  async create({ view }: HttpContext) {
-    return view.render('pages/snippets/create')
+  async create({ request, view }: HttpContext) {
+    const { base } = request.qs()
+    let snippet = {}
+    if (base) {
+      snippet = await this.snippetsService.getSnippet(base)
+    }
+    return view.render('pages/snippets/create', { base: snippet })
   }
 
-  // async edit({ params, view }: HttpContext) {
-  //   const jobId = params.id
-  //   const job = await this.jobService.getJob(jobId)
+  async store({ request, response }: HttpContext) {
+    const { name, description, code, tags } = await request.validateUsing(createSnippetValidator)
 
-  //   return view.render('pages/jobs/edit', { job })
-  // }
+    const snippet = await this.snippetsService.createSnippet({
+      name,
+      description,
+      code,
+      tags,
+    })
 
-  // async update({ params, request, response }: HttpContext) {
-  //   const data = await request.validateUsing(createJobValidator)
+    return response.redirect().toRoute('snippets.show', { id: snippet.sqid })
+  }
 
-  //   await this.jobService.updateJob(params.id, data)
+  async edit({ params, view, bouncer }: HttpContext) {
+    const snippetSqid = params.id
+    const snippet = await this.snippetsService.getSnippet(snippetSqid)
 
-  //   const newUrl = router.builder().params({ id: params.id }).make('jobs.show')
+    await bouncer.authorize(editOrDeleteSnippet, snippet)
 
-  //   response.header('HX-Location', newUrl)
-  // }
+    return view.render('pages/snippets/edit', { snippet: snippet.serialize() })
+  }
+
+  async update({ params, request, response }: HttpContext) {
+    const data = await request.validateUsing(createSnippetValidator)
+    const snippet = await this.snippetsService.updateSnippet(params.id, data)
+    // const newUrl = router.builder().params({ id: params.id }).make('jobs.show')
+    // response.header('HX-Location', newUrl)
+    return response.redirect().toRoute('snippets.show', { id: snippet.sqid })
+  }
+
+  async delete({ params, response }: HttpContext) {
+    await this.snippetsService.deleteSnippet(params.id)
+    return response.redirect().toRoute('snippets.index')
+  }
+
+  async favorite({ params }: HttpContext) {
+    const isFavorite = await this.snippetsService.toggleFavoriteSnippet(params.id)
+    // return view.renderRaw(
+    //   isFavorite ? "@svg('clarity:favorite-solid')" : "@svg('clarity:favorite-line')"
+    // )
+    return isFavorite ? 'Remove from favorites' : 'Add to favorites'
+  }
 }

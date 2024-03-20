@@ -1,3 +1,4 @@
+import Collection from '#models/collection'
 import Tag from '#models/tag'
 import User from '#models/user'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
@@ -9,16 +10,18 @@ export default class extends BaseSeeder {
       {
         email: 'hello@kijowski.dev',
         password: '1234',
-        username: 'Michał Kijowski',
+        name: 'Michał Kijowski',
       }
     )
 
-    const tags = await Tag.updateOrCreateMany('name', [
+    await Tag.updateOrCreateMany('name', [
       {
+        id: 1,
         name: 'One',
       },
-      { name: 'Two' },
-      { name: 'With space' },
+      { id: 2, name: 'Two' },
+      { id: 3, name: 'With space' },
+      { id: 4, name: 'Another complex tag' },
     ])
 
     const snippets = await user.related('snippets').updateOrCreateMany([
@@ -26,20 +29,20 @@ export default class extends BaseSeeder {
         id: 1,
         name: 'First one',
         description: 'Description of first snippet',
-        content: '(defun simple ()\n (interactive)\n (message "Hello"))',
+        code: '(defun simple ()\n (interactive)\n (message "Hello"))',
       },
       {
         id: 2,
         name: 'Second one',
         description: 'Description of second snippet',
-        content: '(defun second ()\n (interactive)\n (message "Hello second"))',
+        code: '(defun second ()\n (interactive)\n (message "Hello second"))',
       },
 
       {
         id: 3,
         name: 'Long one',
         description: 'Description of long snippet',
-        content: `(use-package apheleia
+        code: `(use-package apheleia
   :config
   (add-to-list 'apheleia-formatters '(dprint "dprint" "fmt" "--stdin" filepath))
   (add-to-list 'apheleia-formatters '(dprint-global "dprint" "fmt" "--config" "/Users/michal/.config/dprint/dprint.json" "--stdin" filepath))
@@ -80,7 +83,7 @@ web-mode
 yasnippet
 
 I added these lines to my .emacs:`,
-        content: `(use-package company
+        code: `(use-package company
   ;; Download company if not found
   :ensure t
   :init
@@ -122,6 +125,24 @@ I added these lines to my .emacs:`,
           web-mode) . lsp-deferred))`,
       },
     ])
+
+    await snippets[1].related('tags').sync([1, 2, 3])
+    await snippets[2].related('tags').sync([1, 2])
+    await snippets[3].related('tags').sync([3])
+
+    const collections = await Collection.updateOrCreateMany('name', [
+      {
+        id: 1,
+        name: 'First collection',
+        userId: user.id,
+      },
+      { id: 2, name: 'Second collection', userId: user.id },
+    ])
+
+    await collections[0].related('tags').sync([2, 3])
+    await collections[0].related('snippets').sync([1, 2])
+
+    await collections[1].related('snippets').sync([3])
 
     // snippets.forEach((snippet, idx) => {
     //   snippet.related('tags').attach([tags[idx % 3].id])
