@@ -20,6 +20,7 @@
         @else
         <li>
           <a href="{{ route('login') }}">Login</a>
+          <a href="{{ route('register') }}">Register</a>
         </li>
         @end
         <!-- <li><a href="{{ route('snippets.favorites') }}">Favorites</a></li> -->
@@ -60,7 +61,9 @@
     </div>
     @else
     <div class="join hidden sm:flex ml-5">
-      <a href="{{ route('login') }}" class="btn btn-primary btn-outline join-item">Login</a>
+      <a href="{{ route('login') }}" class="btn btn-primary btn-outline join-item">Login </a>
+
+      <a href="{{ route('register') }}" class="btn btn-primary btn-outline join-item">Register</a>
     </div>
     @end
 </nav>

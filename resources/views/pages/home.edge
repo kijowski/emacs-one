@@ -1,0 +1,14 @@
+@shell({ title: 'emacs.one' })
+
+@header({title})
+<li><a href="{{route('home')}}">Home</a></li>
+@end
+
+<div class="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+  @each(snippet in snippets)
+  @!snippetCard({snippet})
+  @end
+</div>
+
+
+@end
